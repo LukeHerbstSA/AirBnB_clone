@@ -6,7 +6,8 @@ import unittest
 
 def TestFileStorage(unittest.TestCase):
     """class testing file storage class"""
-    def test_new(self):
+    pass
+
 
 if (__name__ == "__main__"):
     unittest.main()

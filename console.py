@@ -7,6 +7,7 @@ from models.base_model import BaseModel
 from models.user import User
 from models.__init__ import storage
 
+
 class HBNBCommand(cmd.Cmd):
     """provides a CLI to create and manipulate hbnb objects"""
     prompt = "(hbnb)"
@@ -28,14 +29,14 @@ class HBNBCommand(cmd.Cmd):
         return True
 
     def do_help(self, arg):
-        """used in conjunction with a corresponding cmd that warrants more info"""
+        """used in conjunction with a corresponding desired cmd"""
         super().do_help(arg)
 
     def do_create(self, arg):
         """creates hbnb objects"""
         if (len(arg) == 1):
             print("** class name missing **")
-        elif ((self.scope_checker)(arg[1]) == True):
+        elif ((self.scope_checker)(arg[1])):
             if (arg[1] == "BaseModel"):
                 obj = BaseModel()
             if (arg[1] == "User"):
@@ -51,7 +52,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
         if (len(arg) == 2):
             print("** instance id missing **")
-        if ((self.scope_checker)(arg[1]) != True):
+        if (not (self.scope_checker)(arg[1])):
             print("** class doesn't exist **")
         instances = storage.__objects
         found = -1
@@ -68,7 +69,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
         if (len(arg) == 2):
             print("** instance id missing **")
-        if ((self.scope_checker)(arg[1]) != True):
+        if (not (self.scope_checker)(arg[1])):
             print("** class doesn't exist **")
         destroy = -1
         instances = storage.__objects
@@ -87,7 +88,7 @@ class HBNBCommand(cmd.Cmd):
         if (len(arg) == 1):
             for key, value in instances.items():
                 print("{}".format(value.__dict__))
-        elif ((self.scope_checker)(arg[1]) != True):
+        elif (not (self.scope_checker)(arg[1])):
             print("** class doesn't exist **")
         else:
             for key, value in instances.items():
@@ -107,7 +108,7 @@ class HBNBCommand(cmd.Cmd):
         elif (len(arg) == 4):
             print("** value missing **")
         else:
-            if ((self.scope_checker)(arg[1]) != True):
+            if (not (self.scope_checker)(arg[1])):
                 print("** class doesn't exist **")
             else:
                 for key, value in instances.items():
@@ -118,6 +119,7 @@ class HBNBCommand(cmd.Cmd):
                 print("** no instance found **")
             else:
                 storage.save()
+
 
 if (__name__ == "__main__"):
     HBNBCommand().cmdloop()

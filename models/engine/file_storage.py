@@ -5,6 +5,7 @@ import sys
 import json
 import uuid
 
+
 class FileStorage:
     """FileStorage instance that writes and reads from .json file"""
     __file_path = "file.json"

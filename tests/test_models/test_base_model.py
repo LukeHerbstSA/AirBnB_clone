@@ -2,9 +2,9 @@
 "unittests testing if base_model works"
 
 import unittest
-
 from ..models.__init__ import storage
 from ..models.base_model import BaseModel
+
 
 class TestBaseModel(unittest.TestCase):
     """class to test functionalites of test_base_model"""
@@ -34,6 +34,7 @@ class TestBaseModel(unittest.TestCase):
         bm1 = BaseModel()
         dictionary_inst = bm1.to_dict()
         self.assertEqual(type(dictionary_inst), dict)
+
 
 if (__name__ == "__main__"):
     unittest.main()
