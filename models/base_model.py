@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """BaseModel classes to store basic objects"""
 
-from __init__ import storage
+from . import storage
 from datetime import datetime
 import uuid
 
