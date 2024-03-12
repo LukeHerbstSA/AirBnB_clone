@@ -20,7 +20,7 @@ class BaseModel:
             for key, value in kwargs.items():
                 if (key != "__class__"):
                     if (key == "updated_at" or key == "created_at"):
-                        setattr(self, key, datetime.fromisoformat(value))
+                        setattr(self, key, datetime.isoformat(value))
                     else:
                         setattr(self, key, value)
             storage.new(self)
@@ -33,7 +33,8 @@ class BaseModel:
     def save(self):
         """saves inst of BaseModel using file storage inst"""
         self.updated_at = datetime.now()
-        storage.save(self)
+        #need to convert datetime values in created & updated at whenever saving. how could this be done?
+        storage.save()
 
     def to_dict(self):
         """constructs an expanded dictionary to return"""
