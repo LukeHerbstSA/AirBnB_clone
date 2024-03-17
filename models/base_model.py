@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""BaseModel classes to store basic objects"""
+"""BaseModel classes to store basic objects."""
 
 from . import storage
 from datetime import datetime
@@ -7,15 +7,16 @@ import uuid
 
 
 class BaseModel:
-    """class base model defines basic objs to be used"""
+    """Class base model defines basic objs to be used."""
+
     def __str__(self):
-        """prints the string repr of an instance"""
+        """Print the string repr of an instance."""
         id_and_dict = "({}) {}".format(self.id, self.__dict__)
         str_rep = "[{}] ".format(type(self).__name__) + id_and_dict
         return (str_rep)
 
     def __init__(self, *args, **kwargs):
-        """initializes an instance of the class (or child class user)"""
+        """Initialize an instance of the class (or child class user)."""
         if (kwargs):
             for key, value in kwargs.items():
                 if (key != "__class__"):
@@ -30,13 +31,13 @@ class BaseModel:
         storage.new(self)
 
     def save(self):
-        """saves inst of BaseModel using file storage inst"""
+        """Save inst of BaseModel using file storage inst."""
         self.updated_at = datetime.now()
         #need to convert datetime values in created & updated at whenever saving. how could this be done?
         storage.save()
 
     def to_dict(self):
-        """constructs an expanded dictionary to return"""
+        """Construct an expanded dictionary to return."""
         inst_dict = self.__dict__.copy()
         inst_dict["__class__"] = type(self).__name__
         inst_dict["created_at"] = (self.created_at).isoformat()

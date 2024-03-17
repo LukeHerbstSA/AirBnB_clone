@@ -1,18 +1,19 @@
 #!/usr/bin/python3
-"""console experience provided by cmd to create/manipulate created objects"""
+"""Console experience provided by cmd to create/manipulate created objects."""
 
 import cmd
 import sys
+from models.base_model import BaseModel
 from models.user import User
 from models.__init__ import storage
 
-
 class HBNBCommand(cmd.Cmd):
-    """provides a CLI to create and manipulate hbnb objects"""
+    """Provide a CLI to create and manipulate hbnb objects."""
+
     prompt = "(hbnb)"
 
     def scope_checker(self, arg):
-        """checks if an objects class is within the scope"""
+        """Check if an objects class is within the scope."""
         available_cls = ["BaseModel", "User"]
         if (arg in available_cls):
             return True
@@ -20,25 +21,26 @@ class HBNBCommand(cmd.Cmd):
             return False
 
     def do_quit(self, arg):
-        """program exits on quit command passed"""
+        """Program exits on quit command passed."""
         return True
 
     def do_EOF(self, arg):
-        """program exits on EOF character passed in stdin"""
+        """Program exits on EOF character passed in stdin."""
         return True
 
     def do_help(self, arg):
-        """used in conjunction with a corresponding desired cmd"""
+        """Use in conjunction with a corresponding desired cmd."""
         super().do_help(arg)
 
     def do_create(self, arg):
-        """creates hbnb objects"""
-        if (len(arg) == 1):
+        """Create hbnb objects."""
+        if (len(arg) == 0):
             print("** class name missing **")
-        elif ((self.scope_checker)(arg[1])):
-            if (arg[1] == "BaseModel"):
+        elif ((self.scope_checker)(arg)):
+            print("class exists")
+            if (arg == "BaseModel"):
                 obj = BaseModel()
-            if (arg[1] == "User"):
+            if (arg == "User"):
                 obj = User()
             print(obj.id)
             storage.save()
@@ -46,7 +48,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
 
     def do_show(self, arg):
-        """prints the string repr of an instance"""
+        """Print the string repr of an instance."""
         if (len(arg) == 1):
             print("** class name missing **")
         if (len(arg) == 2):
@@ -63,7 +65,7 @@ class HBNBCommand(cmd.Cmd):
             print("** no instance found **")
 
     def do_destroy(self, arg):
-        """destroys instances of id and class"""
+        """Destroy instances of id and class."""
         if (len(arg) == 1):
             print("** class name missing **")
         if (len(arg) == 2):
@@ -82,7 +84,7 @@ class HBNBCommand(cmd.Cmd):
             print("** no instance found **")
 
     def do_all(self, arg):
-        """prints all instances in file__objects"""
+        """Print all instances in file__objects."""
         instances = storage.__objects
         if (len(arg) == 1):
             for key, value in instances.items():
@@ -95,7 +97,7 @@ class HBNBCommand(cmd.Cmd):
                     print("{}".format(value.__dict__))
 
     def do_update(self, arg):
-        """updates passed object with passed attr name and val"""
+        """Update passed object with passed attr name and val."""
         id_check = -1
         instances = storage.__objects
         if (len(arg) == 1):
