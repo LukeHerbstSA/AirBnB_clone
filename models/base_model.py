@@ -20,7 +20,7 @@ class BaseModel:
             for key, value in kwargs.items():
                 if (key != "__class__"):
                     if (key == "updated_at" or key == "created_at"):
-                        setattr(self, key, datetime.isoformat(value))
+                        setattr(self, key, datetime.fromisoformat(value))
                     else:
                         setattr(self, key, value)
             storage.new(self)
@@ -38,7 +38,7 @@ class BaseModel:
 
     def to_dict(self):
         """constructs an expanded dictionary to return"""
-        inst_dict = self.__dict__
+        inst_dict = self.__dict__.copy()
         inst_dict["__class__"] = type(self).__name__
         inst_dict["created_at"] = (self.created_at).isoformat()
         inst_dict["updated_at"] = (self.updated_at).isoformat()
