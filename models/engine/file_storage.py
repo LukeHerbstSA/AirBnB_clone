@@ -3,11 +3,11 @@
 
 import sys
 import json
-
+import os
 
 class FileStorage:
     """FileStorage instance that writes and reads from .json file"""
-    __file_path = "file.json"
+    __file_path = os.path.abspath("{}/file.json".format(os.path.dirname(__file__)))
     __objects = {}
 
     def all(self):
