@@ -24,9 +24,7 @@ class FileStorage:
         current_data = (self.__objects).copy()
         objs = (self.__objects).copy()
         for name_id, obj in objs.items():
-            obj_dict = (obj.__dict__).copy()
-            obj_dict["created_at"] = obj_dict["created_at"].isoformat()
-            obj_dict["updated_at"] = obj_dict["updated_at"].isoformat()
+            obj_dict = obj.to_dict()
             objs[name_id] = obj_dict
         json_dict = json.dumps(objs)
         try:
