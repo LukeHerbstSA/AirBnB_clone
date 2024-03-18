@@ -10,7 +10,7 @@ from models.__init__ import storage
 class HBNBCommand(cmd.Cmd):
     """Provide a CLI to create and manipulate hbnb objects."""
 
-    prompt = "(hbnb)"
+    prompt = "(hbnb) "
 
     def scope_checker(self, arg):
         """Check if an objects class is within the scope."""
