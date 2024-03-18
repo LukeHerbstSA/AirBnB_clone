@@ -15,10 +15,11 @@ class HBNBCommand(cmd.Cmd):
     def scope_checker(self, arg):
         """Check if an objects class is within the scope."""
         available_cls = ["BaseModel", "User"]
-        if (arg in available_cls):
-            return True
-        else:
-            return False
+        for item in available_cls:
+            if (item in arg):
+                return True
+            else:
+                return False
 
     def do_quit(self, arg):
         """Program exits on quit command passed."""
@@ -37,7 +38,6 @@ class HBNBCommand(cmd.Cmd):
         if (len(arg) == 0):
             print("** class name missing **")
         elif ((self.scope_checker)(arg)):
-            print("class exists")
             if (arg == "BaseModel"):
                 obj = BaseModel()
             if (arg == "User"):
@@ -53,13 +53,13 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
         if (len(arg) == 2):
             print("** instance id missing **")
-        if (not (self.scope_checker)(arg[1])):
+        if (not (self.scope_checker)(arg)):
             print("** class doesn't exist **")
-        instances = storage.__objects
+        instances = storage._FileStorage__objects
         found = -1
         for key, value in instances.items():
-            if (arg[2] in key):
-                print(value.__dict__)
+            if (value.id in arg):
+                print(value)
                 found = 0
         if (found == -1):
             print("** no instance found **")
@@ -70,7 +70,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
         if (len(arg) == 2):
             print("** instance id missing **")
-        if (not (self.scope_checker)(arg[1])):
+        if (not (self.scope_checker)(arg)):
             print("** class doesn't exist **")
         destroy = -1
         instances = storage.__objects
@@ -85,15 +85,15 @@ class HBNBCommand(cmd.Cmd):
 
     def do_all(self, arg):
         """Print all instances in file__objects."""
-        instances = storage.__objects
+        instances = storage._FileStorage__objects
         if (len(arg) == 1):
             for key, value in instances.items():
                 print("{}".format(value.__dict__))
-        elif (not (self.scope_checker)(arg[1])):
+        elif (not (self.scope_checker)(arg)):
             print("** class doesn't exist **")
         else:
             for key, value in instances.items():
-                if (arg[1] == type(value).__name__):
+                if (type(value).__name__ in arg):
                     print("{}".format(value.__dict__))
 
     def do_update(self, arg):
