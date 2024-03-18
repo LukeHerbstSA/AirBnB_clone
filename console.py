@@ -38,9 +38,9 @@ class HBNBCommand(cmd.Cmd):
         if (len(arg) == 0):
             print("** class name missing **")
         elif ((self.scope_checker)(arg)):
-            if (arg == "BaseModel"):
+            if ("BaseModel" in arg):
                 obj = BaseModel()
-            if (arg == "User"):
+            if ("User" in arg):
                 obj = User()
             print(obj.id)
             storage.save()
@@ -86,15 +86,15 @@ class HBNBCommand(cmd.Cmd):
     def do_all(self, arg):
         """Print all instances in file__objects."""
         instances = storage._FileStorage__objects
-        if (len(arg) == 1):
+        if (len(arg) == 0):
             for key, value in instances.items():
-                print("{}".format(value.__dict__))
+                print("{}".format(value))
         elif (not (self.scope_checker)(arg)):
             print("** class doesn't exist **")
         else:
             for key, value in instances.items():
                 if (type(value).__name__ in arg):
-                    print("{}".format(value.__dict__))
+                    print("{}".format(value))
 
     def do_update(self, arg):
         """Update passed object with passed attr name and val."""
