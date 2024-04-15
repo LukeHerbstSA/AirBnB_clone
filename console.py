@@ -5,21 +5,27 @@ import cmd
 import sys
 from models.base_model import BaseModel
 from models.user import User
-from models.__init__ import storage
+from models.base_model import storage
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
 
 class HBNBCommand(cmd.Cmd):
     """Provide a CLI to create and manipulate hbnb objects."""
 
     prompt = "(hbnb) "
+    available_cls = ["BaseModel", "User", "State", "City", "Amenity"
+            , "Place", "Review"]
 
     def scope_checker(self, arg):
         """Check if an objects class is within the scope."""
-        available_cls = ["BaseModel", "User"]
-        for item in available_cls:
+        flag = 1
+        for item in self.available_cls:
             if (item in arg):
-                return True
-            else:
-                return False
+                flag = 0
+        return (True if flag == 0 else False)
 
     def do_quit(self, arg):
         """Program exits on quit command passed."""
@@ -38,88 +44,102 @@ class HBNBCommand(cmd.Cmd):
         if (len(arg) == 0):
             print("** class name missing **")
         elif ((self.scope_checker)(arg)):
-            if ("BaseModel" in arg):
-                obj = BaseModel()
-            if ("User" in arg):
-                obj = User()
+            for item in self.available_cls:
+                if (arg == item):
+                    obj = eval(item + "()")
             print(obj.id)
-            storage.save()
         else:
             print("** class doesn't exist **")
 
     def do_show(self, arg):
         """Print the string repr of an instance."""
-        if (len(arg) == 1):
+        argsplit = arg.split(" ")
+        if (len(argsplit) == 0):
             print("** class name missing **")
-        if (len(arg) == 2):
-            print("** instance id missing **")
-        if (not (self.scope_checker)(arg)):
+        elif (not (self.scope_checker)(argsplit[0])):
             print("** class doesn't exist **")
-        instances = storage._FileStorage__objects
-        found = -1
-        for key, value in instances.items():
-            if (value.id in arg):
-                print(value)
-                found = 0
-        if (found == -1):
-            print("** no instance found **")
+        elif (len(argsplit) > 1):
+            instances = storage._FileStorage__objects
+            found = -1
+            for key, value in instances.items():
+                if (value.id in argsplit[1]):
+                    print(value)
+                    found = 0
+            if (found == -1):
+                print("** no instance found **")
+        else:
+            print("** instance id missing **")
 
     def do_destroy(self, arg):
         """Destroy instances of id and class."""
-        if (len(arg) == 1):
+        argsplit = arg.split(" ")
+        if (len(argsplit) == 0):
             print("** class name missing **")
-        if (len(arg) == 2):
-            print("** instance id missing **")
-        if (not (self.scope_checker)(arg)):
+        elif (not (self.scope_checker)(argsplit[0])):
             print("** class doesn't exist **")
-        destroy = -1
-        instances = storage.__objects
-        for key, value in instances.items():
-            if (key == "{}.{}".format(arg[1], arg[2])):
-                instances.pop(key)
-                destroy = 0
-        if (destroy == 0):
-            storage.save()
+        elif (len(argsplit) > 1):
+            destroy = -1
+            instances = storage._FileStorage__objects
+            for key, value in instances.items():
+                if (value.id in argsplit[1]):
+                    key_name = key
+                    destroy = 0
+            if (destroy == 0):
+                instances.pop(key_name)
+                storage.save()
+            else:
+                print("** no instance found **")
         else:
-            print("** no instance found **")
+            print("** instance id missing **")
 
     def do_all(self, arg):
         """Print all instances in file__objects."""
-        instances = storage._FileStorage__objects
+        objs = []
+        for key, value in storage._FileStorage__objects.items():
+            objs.append(value)
         if (len(arg) == 0):
-            for key, value in instances.items():
-                print("{}".format(value))
-        elif (not (self.scope_checker)(arg)):
-            print("** class doesn't exist **")
+            print("[", end="")
+            for i in range(0, len(objs)):
+                print("\"{}\"".format(objs[i]), end="")
+                if (i != len(objs) - 1):
+                    print(", ", end="")
+            print("]")
+        elif ((self.scope_checker)(arg)):
+            print("[", end="")
+            for i in range(0, len(objs)):
+                if (type(objs[i]).__name__ == arg):
+                    print("\"{}\"".format(objs[i]), end="")
+                    if (i != len(objs) - 1):
+                        print(", ", end="")
+            print("]")
         else:
-            for key, value in instances.items():
-                if (type(value).__name__ in arg):
-                    print("{}".format(value))
+            print("** class doesn't exist **")
 
     def do_update(self, arg):
         """Update passed object with passed attr name and val."""
+        argsplit = arg.split(" ")
         id_check = -1
-        instances = storage.__objects
-        if (len(arg) == 1):
+        instances = storage._FileStorage__objects
+        if (len(argsplit) == 0):
             print("class name missing **")
-        elif (len(arg) == 2):
+        elif (len(argsplit) == 1):
             print("** instance id missing **")
-        elif (len(arg) == 3):
+        elif (len(argsplit) == 2):
             print("** attribute name missing **")
-        elif (len(arg) == 4):
+        elif (len(argsplit) == 3):
             print("** value missing **")
         else:
-            if (not (self.scope_checker)(arg[1])):
+            if (not (self.scope_checker)(argsplit[0])):
                 print("** class doesn't exist **")
             else:
                 for key, value in instances.items():
-                    if (key == "{}.{}".format(arg[1], arg[2])):
-                        setattr(value, arg[3], arg[4])
+                    if (key == "{}.{}".format(argsplit[0], argsplit[1])):
+                        setattr(value, argsplit[2], argsplit[3])
                         id_check = 0
-            if (id_check == -1):
-                print("** no instance found **")
-            else:
-                storage.save()
+                if (id_check == -1):
+                    print("** no instance found **")
+                else:
+                    storage.save()
 
 
 if (__name__ == "__main__"):

@@ -11,3 +11,5 @@ bm2 = {"id": "6728496b-1902-4005-a805-358361a66bc7", "created_at": "2024-03-17T1
 print("dict: {}".format(bm2))
 bm2 = BaseModel(**(bm2))
 print(bm2)
+print("about to print all objects --")
+print(storage._FileStorage__objects)

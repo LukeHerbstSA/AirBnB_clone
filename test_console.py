@@ -2,3 +2,4 @@
 from models import storage
 from console import HBNBCommand
 HBNBCommand()
+
