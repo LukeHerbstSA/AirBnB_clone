@@ -29,6 +29,7 @@ class BaseModel:
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
             storage.new(self)
+            storage.save()
 
     def save(self):
         """Save inst of BaseModel using file storage inst."""
